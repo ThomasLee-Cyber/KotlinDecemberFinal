@@ -59,9 +59,9 @@ fun bestOption(input: List<Pair<String, Int>>): Pair<String, Int> {
 }
 
 fun straightScore(small: Boolean, input: MutableList<Int>): Int {
-    var womboComboLevel = 4
+    var maxSuccessCounter = 4
     if (!small) {
-        womboComboLevel = 5
+        maxSuccessCounter = 5
     }
     val sortedList = input.sorted()
     var previousNumber = 0
@@ -77,7 +77,7 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
     }
     }
 
-    return if (successCounter == womboComboLevel) {
+    return if (successCounter == maxSuccessCounter) {
         if (small) {
             30
         } else {
