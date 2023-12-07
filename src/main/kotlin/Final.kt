@@ -5,8 +5,6 @@ fun main() {
 rollDice()
 }
 
-val possibleDiceRolls = listOf(1, 2, 3, 4, 5, 6)
-
 fun randomNumberGenerator(): Int {
     val theChosenOne = Random.nextInt(6)
     return when {
@@ -23,7 +21,7 @@ fun rollDice() {
         output.add(randomNumberGenerator())
     }
 
-    val allRolls = listOf<Pair<String, Int>>(
+    val allRolls = listOf(
         Pair("Ones", sameNumberScore(1, output)),
         Pair("Twos", sameNumberScore(2, output)),
         Pair("Threes", sameNumberScore(3, output)),
@@ -56,7 +54,7 @@ fun rollDice() {
 }
 
 fun bestOption(input: List<Pair<String, Int>>): Pair<String, Int> {
-    var dummyList = input.sortedBy { it.second }
+    val dummyList = input.sortedBy { it.second }
     return dummyList.last()
 }
 
@@ -65,7 +63,7 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
     if (!small) {
         womboComboLevel = 5
     }
-    var sortedList = input.sorted()
+    val sortedList = input.sorted()
     var previousNumber = 0
     var successCounter = 0
 
@@ -79,36 +77,34 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
     }
     }
 
-    if (successCounter == womboComboLevel) {
+    return if (successCounter == womboComboLevel) {
         if (small) {
-            return 30
+            30
         } else {
-            return 40
+            40
         }
     } else {
-        return 0
+        0
     }
-
-    return 42069
 }
 
 fun yahtzeeScore(input: MutableList<Int>): Int {
-    if (
+    return if (
         ofAKindScore(5, input) > 0
     ) {
-        return 50
+        50
     } else {
-        return 0
+        0
     }
 }
 
 fun fullHouseScore(input: MutableList<Int>): Int {
-    if (
+    return if (
         (ofAKindScore(2, input) > 0) && (ofAKindScore(3, input) > 0)
     ) {
-        return 25
+        25
     } else {
-        return 0
+        0
     }
 }
 
