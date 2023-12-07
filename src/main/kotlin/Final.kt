@@ -16,10 +16,10 @@ fun randomNumberGenerator(): Int {
 
 // Nullable "ManualOverride" input for testing purposes?
 fun rollDice() {
-    val output = mutableListOf<Int>()
-    for (num in 1..5) {
-        output.add(randomNumberGenerator())
-    }
+    val output = mutableListOf<Int>(2, 3, 4, 5, 6)
+//    for (num in 1..5) {
+//        output.add(randomNumberGenerator())
+//    }
 
     val allRolls = listOf(
         Pair("Ones", sameNumberScore(1, output)),
@@ -68,7 +68,7 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
     var successCounter = 0
 
     for (numba in sortedList) {
-    if (previousNumber - numba == -1) {
+    if (previousNumber - numba == -1 || (numba == 2 && previousNumber == 0)) {
         previousNumber = numba
         successCounter++
     } else {
@@ -79,13 +79,18 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
 
     return if (successCounter == womboComboLevel) {
         if (small) {
-            30
+            if (successCounter == 5) {
+                40
+            } else {
+                30
+            }
         } else {
             40
         }
     } else {
         0
     }
+
 }
 
 fun yahtzeeScore(input: MutableList<Int>): Int {
