@@ -28,8 +28,8 @@ fun rollDice() {
         Pair("Fours", sameNumberScore(4, output)),
         Pair("Fives", sameNumberScore(5, output)),
         Pair("Sixes", sameNumberScore(6, output)),
-        Pair("Three of a Kind", ofAKindScore(3, output)),
-        Pair("Four of a Kind", ofAKindScore(4, output)),
+        Pair("Three of a Kind", ofAKindScore(3, output, true)),
+        Pair("Four of a Kind", ofAKindScore(4, output, true)),
         Pair("Full House", fullHouseScore(output)),
         Pair("Chance", chanceScore(output)),
         Pair("Small Straight", straightScore(true, output)),
@@ -38,11 +38,11 @@ fun rollDice() {
     )
 
     println("Dice Roll: $output")
-    println("All Choices: ")
+    println("=== All Choices: ===")
     for (rollSet in allRolls) {
         println("${rollSet.first}: ${rollSet.second}")
     }
-    println("Choices with Points:")
+    println("=== Choices with Points: ===")
     for (rollSet in allRolls) {
         if (rollSet.second != 0) {
             println("${rollSet.first}: ${rollSet.second}")
@@ -59,10 +59,6 @@ fun bestOption(input: List<Pair<String, Int>>): Pair<String, Int> {
 }
 
 fun straightScore(small: Boolean, input: MutableList<Int>): Int {
-    var womboComboLevel = 4
-    if (!small) {
-        womboComboLevel = 5
-    }
     val sortedList = input.sorted()
     var previousNumber = 0
     var successCounter = 0
@@ -77,18 +73,10 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
     }
     }
 
-    return if (successCounter == womboComboLevel) {
-        if (small) {
-            if (successCounter == 5) {
-                40
-            } else {
-                30
-            }
-        } else {
-            40
-        }
-    } else {
-        0
+    return when {
+        (!small && successCounter >= 5) -> 40
+        (small && successCounter >= 4) -> 30
+        else -> 0
     }
 
 }
@@ -113,13 +101,26 @@ fun fullHouseScore(input: MutableList<Int>): Int {
     }
 }
 
-fun ofAKindScore(allowedKinds: Int, input: MutableList<Int>): Int {
+fun ofAKindScore(
+    allowedKinds: Int,
+    input: MutableList<Int>,
+    finalCalculationMode: Boolean = false
+): Int {
     var total = 0
 
-    for (numba in input) {
-        if (input.count { it == numba } == allowedKinds) {
-            total += chanceScore(input)
-            break
+    if (!finalCalculationMode) {
+        for (numba in input) {
+            if (input.count { it == numba } == allowedKinds) {
+                total += chanceScore(input)
+                break
+            }
+        }
+    } else {
+        for (numba in input) {
+            if (input.count { it == numba } >= allowedKinds) {
+                total += chanceScore(input)
+                break
+            }
         }
     }
 
