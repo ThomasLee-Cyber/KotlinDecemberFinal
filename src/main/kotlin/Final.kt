@@ -1,6 +1,5 @@
 import kotlin.random.Random
 
-
 fun main() {
 rollDice()
 }
@@ -14,12 +13,9 @@ fun randomNumberGenerator(): Int {
     }
 }
 
-// Nullable "ManualOverride" input for testing purposes?
 fun rollDice() {
-    val output = mutableListOf<Int>(2, 3, 4, 5, 6)
-//    for (num in 1..5) {
-//        output.add(randomNumberGenerator())
-//    }
+    val output =  mutableListOf<Int>()
+    for (num in 1..5) { output.add(randomNumberGenerator()) }
 
     val allRolls = listOf(
         Pair("Ones", sameNumberScore(1, output)),
@@ -84,54 +80,41 @@ fun straightScore(small: Boolean, input: MutableList<Int>): Int {
 fun yahtzeeScore(input: MutableList<Int>): Int {
     return if (
         ofAKindScore(5, input) > 0
-    ) {
-        50
-    } else {
-        0
-    }
+    ) { 50 } else { 0 }
 }
 
 fun fullHouseScore(input: MutableList<Int>): Int {
     return if (
         (ofAKindScore(2, input) > 0) && (ofAKindScore(3, input) > 0)
-    ) {
-        25
-    } else {
-        0
-    }
+    ) { 25 } else { 0 }
 }
 
 fun ofAKindScore(
     allowedKinds: Int,
     input: MutableList<Int>,
-    finalCalculationMode: Boolean = false
+    finalCalculation: Boolean = false
 ): Int {
     var total = 0
-
-    if (!finalCalculationMode) {
+    fun updateTotal() {total += chanceScore(input)}
+    if (!finalCalculation) {
         for (numba in input) {
             if (input.count { it == numba } == allowedKinds) {
-                total += chanceScore(input)
-                break
+                updateTotal(); break
             }
         }
     } else {
         for (numba in input) {
             if (input.count { it == numba } >= allowedKinds) {
-                total += chanceScore(input)
-                break
+                updateTotal(); break
             }
         }
     }
-
     return total
 }
 
 fun chanceScore(input: MutableList<Int>): Int {
     var total = 0
-    for (numba in input) {
-        total += numba
-    }
+    for (numba in input) { total += numba }
     return total
 }
 
@@ -140,7 +123,6 @@ fun sameNumberScore(
     input: MutableList<Int>
 ): Int {
     var total = 0
-
     for (number in input) {
         if (number == numberCategory) {
             total += number
@@ -148,6 +130,5 @@ fun sameNumberScore(
             continue
         }
     }
-
     return total
 }
