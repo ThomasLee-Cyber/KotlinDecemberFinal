@@ -96,16 +96,16 @@ fun ofAKindScore(
 ): Int {
     var total = 0
     fun updateTotal() {total += chanceScore(input)}
-    if (!finalCalculation) {
-        for (numba in input) {
-            if (input.count { it == numba } == allowedKinds) {
-                updateTotal(); break
-            }
-        }
-    } else {
-        for (numba in input) {
+    for (numba in input) {
+        if (finalCalculation) {
             if (input.count { it == numba } >= allowedKinds) {
-                updateTotal(); break
+                updateTotal()
+                break
+            }
+        } else {
+            if (input.count { it == numba } == allowedKinds) {
+                updateTotal()
+                break
             }
         }
     }
